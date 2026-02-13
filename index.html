@@ -2,37 +2,198 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Specjalna Wiadomość ❤️</title>
     <style>
-        body { background-color: #fff0f3; text-align: center; font-family: 'Arial', sans-serif; color: #c9184a; }
-        .container { margin-top: 100px; }
-        .heart { color: #ff4d6d; font-size: 50px; }
-        .btn { 
-            padding: 15px 30px; font-size: 20px; cursor: pointer;
-            border: none; border-radius: 20px; transition: 0.3s;
+        body {
+            background-color: #fff0f3;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            color: #c9184a;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        #yes { background-color: #ff4d6d; color: white; }
-        #no { background-color: #808080; color: white; position: relative; }
+
+        .container {
+            width: 95%;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        .heart {
+            color: #ff4d6d;
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-top: 10px;
+            line-height: 1.1;
+        }
+
+        p {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 20px 50px;
+            font-size: 2.2rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 40px;
+            transition: 0.3s;
+            margin: 15px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        #yes {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        #no {
+            background-color: #808080;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Kontener na dwa zdjęcia obok siebie */
+        .photo-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .responsive-img {
+            width: 45%;
+            min-width: 280px;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            object-fit: cover;
+        }
+
+        #reset-btn {
+            background-color: #c9184a;
+            color: white;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            padding: 15px 30px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                font-size: 1.6rem;
+                padding: 15px 30px;
+            }
+
+            .heart {
+                font-size: 60px;
+            }
+
+            .responsive-img {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <audio id="loveSong" loop>
+        <source src="muzyka.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="main-content" class="container">
         <div class="heart">❤️</div>
-        <h1>Hej [Imię Dziewczyny]!</h1>
+        <h1>Julciu, moja miłości!</h1>
         <p>Sprawiłaś, że ten rok był wyjątkowy. Czy zostaniesz moją Walentynką?</p>
-        
-        <button class="btn" id="yes" onclick="alert('Jeeej! Już nie mogę się doczekać! ❤️')">TAK!</button>
-        <button class="btn" id="no" onmouseover="moveButton()">NIE</button>
+
+        <button class="btn" id="yes" onclick="showSuccess()">TAK!</button>
+        <button class="btn" id="no" onmouseover="handleMouseOver()" onclick="showCrazy()">NIE</button>
+    </div>
+
+    <div id="success-screen" class="container hidden">
+        <div class="heart">💖</div>
+        <h1>Jeeej! ❤️</h1>
+        <p>Wiedziałem! To będzie wspaniały dzień!</p>
+        <div class="photo-grid">
+            <img src="tak1.jpg" class="responsive-img" alt="Zdjęcie tak 1">
+            <img src="tak2.jpg" class="responsive-img" alt="Zdjęcie tak 2">
+        </div>
+    </div>
+
+    <div id="crazy-screen" class="container hidden">
+        <div class="heart">🤨</div>
+        <h1>Ty chyba oszalałaś??</h1>
+        <p>Zły przycisk, Julciu. Spróbuj jeszcze raz...</p>
+        <div class="photo-grid">
+            <img src="nie1.jpg" class="responsive-img" alt="Zdjęcie nie 1">
+            <img src="nie2.jpg" class="responsive-img" alt="Zdjęcie nie 2">
+        </div>
+        <br>
+        <button class="btn" id="reset-btn" onclick="goBack()">Wracam do rozumu</button>
     </div>
 
     <script>
+        let isCrazyMode = false;
+
+        function handleMouseOver() {
+            if (isCrazyMode) {
+                moveButton();
+            }
+        }
+
         function moveButton() {
             const btn = document.getElementById('no');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
             btn.style.position = 'absolute';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
+        }
+
+        function showSuccess() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+            const audio = document.getElementById('loveSong');
+            audio.play().catch(e => console.log("Audio potrzebuje interakcji"));
+        }
+
+        function showCrazy() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('crazy-screen').classList.remove('hidden');
+            isCrazyMode = true;
+        }
+
+        function goBack() {
+            document.getElementById('crazy-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            const btn = document.getElementById('no');
+            btn.style.position = 'relative';
+            btn.style.left = '0';
+            btn.style.top = '0';
         }
     </script>
 </body>
