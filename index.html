@@ -16,6 +16,7 @@
             justify-content: center;
             min-height: 100vh;
             overflow-x: hidden;
+            cursor: pointer; /* Sugeruje, że warto kliknąć */
         }
 
         .container {
@@ -80,11 +81,10 @@
         .responsive-img {
             width: 45%;
             min-width: 280px;
-            height: 300px; /* Stała wysokość sprawia, że zdjęcia są równe */
+            height: 300px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            /* PRZYCINANIE: zdjęcia wypełniają ramkę */
-            object-fit: cover; 
+            object-fit: cover;
         }
 
         #reset-btn {
@@ -96,16 +96,31 @@
         }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            p { font-size: 1.3rem; }
-            .btn { font-size: 1.6rem; padding: 15px 30px; }
-            .heart { font-size: 60px; }
-            .responsive-img { width: 90%; height: 250px; }
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                font-size: 1.6rem;
+                padding: 15px 30px;
+            }
+
+            .heart {
+                font-size: 60px;
+            }
+
+            .responsive-img {
+                width: 90%;
+                height: 250px;
+            }
         }
     </style>
 </head>
-<body>
-
+<body onclick="startAudio()">
     <audio id="loveSong" loop>
         <source src="record.mp3" type="audio/mpeg">
     </audio>
@@ -122,7 +137,7 @@
     <div id="success-screen" class="container hidden">
         <div class="heart">💖</div>
         <h1>Jeeej! ❤️</h1>
-        <p>Wiedziałem! To będzie wspaniały dzień!</p>
+        <p>Wiedziałem! Kocham cię myszko 🥰</p>
         <div class="photo-grid">
             <img src="tak1.jpg" class="responsive-img" alt="Zdjęcie tak 1">
             <img src="tak2.jpg" class="responsive-img" alt="Zdjęcie tak 2">
@@ -138,11 +153,22 @@
             <img src="nie2.jpg" class="responsive-img" alt="Zdjęcie nie 2">
         </div>
         <br>
-        <button class="btn" id="reset-btn" onclick="goBack()">Wracam do rozumu</button>
+        <button class="btn" id="reset-btn" onclick="goBack()">Ostatnia szansa 🤭 </button>
     </div>
 
     <script>
         let isCrazyMode = false;
+        const audio = document.getElementById('loveSong');
+
+        // Funkcja uruchamiająca audio
+        function startAudio() {
+            audio.play().catch(e => {
+                console.log("Autoplay zablokowany, czekam na interakcję.");
+            });
+        }
+
+        // Próba odpalenia audio od razu (zadziała rzadko, ale warto mieć)
+        window.addEventListener('load', startAudio);
 
         function handleMouseOver() {
             if (isCrazyMode) {
@@ -160,13 +186,13 @@
         }
 
         function showSuccess() {
+            startAudio(); // Dodatkowe upewnienie się
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
-            const audio = document.getElementById('loveSong');
-            audio.play().catch(e => console.log("Czekam na interakcję dla dźwięku"));
         }
 
         function showCrazy() {
+            startAudio(); // Dodatkowe upewnienie się
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('crazy-screen').classList.remove('hidden');
             isCrazyMode = true;
