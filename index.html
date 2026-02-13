@@ -15,7 +15,8 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow: hidden; 
+            /* Odblokowane scrollowanie pionowe, zablokowane poziome */
+            overflow-x: hidden; 
             cursor: pointer;
         }
 
@@ -23,6 +24,7 @@
             width: 95%;
             max-width: 900px;
             padding: 20px;
+            position: relative; /* Ważne dla uciekającego przycisku */
         }
 
         .heart {
@@ -149,7 +151,7 @@
         const audio = document.getElementById('loveSong');
 
         function startAudio() {
-            audio.play().catch(e => console.log("Czekam na kliknięcie..."));
+            audio.play().catch(e => console.log("Czekam na klik..."));
         }
 
         window.addEventListener('load', startAudio);
@@ -170,10 +172,13 @@
 
         function moveButton() {
             const btn = document.getElementById('no');
-            btn.style.position = 'fixed'; 
+            const container = document.querySelector('.container');
             
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 40) + 20;
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 40) + 20;
+            btn.style.position = 'absolute'; 
+            
+            // Obliczanie pozycji wewnątrz kontenera, by nie uciekał poza widok
+            const x = Math.random() * (container.offsetWidth - btn.offsetWidth);
+            const y = Math.random() * (container.offsetHeight - btn.offsetHeight);
             
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
@@ -183,6 +188,7 @@
             startAudio();
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
+            window.scrollTo(0, 0); // Wraca na górę przy zmianie ekranu
         }
 
         function showCrazy() {
@@ -190,6 +196,7 @@
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('crazy-screen').classList.remove('hidden');
             isCrazyMode = true;
+            window.scrollTo(0, 0);
         }
 
         function goBack() {
@@ -199,26 +206,20 @@
             btn.style.position = 'relative';
             btn.style.left = '0';
             btn.style.top = '0';
+            window.scrollTo(0, 0);
         }
 
-        // Funkcja resetująca wszystko do stanu początkowego
         function resetAll() {
-            // Zatrzymaj i zresetuj muzykę
             audio.pause();
             audio.currentTime = 0;
-            
-            // Ukryj ekran sukcesu, pokaż główny
             document.getElementById('success-screen').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
-            
-            // Zresetuj pozycję przycisku NIE
             const btn = document.getElementById('no');
             btn.style.position = 'relative';
             btn.style.left = '0';
             btn.style.top = '0';
-            
-            // Opcjonalnie: wyłącz tryb uciekania, dopóki znowu nie kliknie NIE
             isCrazyMode = false;
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
