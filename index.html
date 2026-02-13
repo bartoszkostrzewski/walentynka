@@ -15,8 +15,8 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            cursor: pointer; /* Sugeruje, że warto kliknąć */
+            overflow: hidden; /* Ważne: zapobiega przewijaniu przy uciekaniu przycisku */
+            cursor: pointer;
         }
 
         .container {
@@ -48,10 +48,11 @@
             cursor: pointer;
             border: none;
             border-radius: 40px;
-            transition: 0.3s;
+            transition: 0.2s;
             margin: 15px;
             font-weight: bold;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            touch-action: manipulation; /* Usuwa opóźnienie dotyku na mobile */
         }
 
         #yes {
@@ -96,31 +97,16 @@
         }
 
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-
-            p {
-                font-size: 1.3rem;
-            }
-
-            .btn {
-                font-size: 1.6rem;
-                padding: 15px 30px;
-            }
-
-            .heart {
-                font-size: 60px;
-            }
-
-            .responsive-img {
-                width: 90%;
-                height: 250px;
-            }
+            h1 { font-size: 2.2rem; }
+            p { font-size: 1.3rem; }
+            .btn { font-size: 1.6rem; padding: 15px 30px; }
+            .heart { font-size: 60px; }
+            .responsive-img { width: 90%; height: 250px; }
         }
     </style>
 </head>
 <body onclick="startAudio()">
+
     <audio id="loveSong" loop>
         <source src="record.mp3" type="audio/mpeg">
     </audio>
@@ -131,7 +117,7 @@
         <p>Sprawiłaś, że ten rok był wyjątkowy. Czy zostaniesz moją Walentynką?</p>
 
         <button class="btn" id="yes" onclick="showSuccess()">TAK!</button>
-        <button class="btn" id="no" onmouseover="handleMouseOver()" onclick="showCrazy()">NIE</button>
+        <button class="btn" id="no" onpointerenter="handleInteraction()" onclick="handleNoClick()">NIE</button>
     </div>
 
     <div id="success-screen" class="container hidden">
@@ -153,46 +139,55 @@
             <img src="nie2.jpg" class="responsive-img" alt="Zdjęcie nie 2">
         </div>
         <br>
-        <button class="btn" id="reset-btn" onclick="goBack()">Ostatnia szansa 🤭 </button>
+        <button class="btn" id="reset-btn" onclick="goBack()">Ostatnia szansa 🤭</button>
     </div>
 
     <script>
         let isCrazyMode = false;
         const audio = document.getElementById('loveSong');
 
-        // Funkcja uruchamiająca audio
         function startAudio() {
-            audio.play().catch(e => {
-                console.log("Autoplay zablokowany, czekam na interakcję.");
-            });
+            audio.play().catch(e => console.log("Czekam na kliknięcie..."));
         }
 
-        // Próba odpalenia audio od razu (zadziała rzadko, ale warto mieć)
         window.addEventListener('load', startAudio);
 
-        function handleMouseOver() {
+        // Wykrywa najechanie/dotknięcie
+        function handleInteraction() {
             if (isCrazyMode) {
                 moveButton();
             }
         }
 
+        // Obsługuje kliknięcie (szczególnie ważne na mobile)
+        function handleNoClick() {
+            if (!isCrazyMode) {
+                showCrazy();
+            } else {
+                moveButton(); // W trybie crazy przycisk ucieka nawet przy kliknięciu
+            }
+        }
+
         function moveButton() {
             const btn = document.getElementById('no');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
-            btn.style.position = 'absolute';
+            // Fixed lepiej zapobiega ucieczce przycisku poza obszar widzenia na telefonie
+            btn.style.position = 'fixed'; 
+            
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 40) + 20;
+            
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
 
         function showSuccess() {
-            startAudio(); // Dodatkowe upewnienie się
+            startAudio();
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
         }
 
         function showCrazy() {
-            startAudio(); // Dodatkowe upewnienie się
+            startAudio();
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('crazy-screen').classList.remove('hidden');
             isCrazyMode = true;
@@ -205,6 +200,7 @@
             btn.style.position = 'relative';
             btn.style.left = '0';
             btn.style.top = '0';
+            // Przycisk ucieknie od razu, gdy tylko spróbuje go dotknąć po powrocie
         }
     </script>
 </body>
