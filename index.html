@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Specjalna Wiadomość ❤️</title>
     <style>
-        body { 
-            background-color: #fff0f3; 
-            text-align: center; 
-            font-family: 'Arial', sans-serif; 
-            color: #c9184a; 
+        body {
+            background-color: #fff0f3;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            color: #c9184a;
             margin: 0;
             display: flex;
             align-items: center;
@@ -17,32 +17,59 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        .container { 
+
+        .container {
             width: 95%;
-            max-width: 900px; 
-            padding: 20px; 
+            max-width: 900px;
+            padding: 20px;
         }
-        .heart { color: #ff4d6d; font-size: 80px; margin-bottom: 10px; }
-        
-        h1 { font-size: 3.5rem; margin-top: 10px; line-height: 1.1; }
-        p { font-size: 1.8rem; margin-bottom: 30px; }
-        
-        .btn { 
-            padding: 20px 50px; 
-            font-size: 2.2rem; 
+
+        .heart {
+            color: #ff4d6d;
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-top: 10px;
+            line-height: 1.1;
+        }
+
+        p {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 20px 50px;
+            font-size: 2.2rem;
             cursor: pointer;
-            border: none; 
-            border-radius: 40px; 
+            border: none;
+            border-radius: 40px;
             transition: 0.3s;
             margin: 15px;
             font-weight: bold;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        #yes { background-color: #ff4d6d; color: white; }
-        #no { background-color: #808080; color: white; position: relative; z-index: 10; }
 
-        .hidden { display: none; }
-        
+        #yes {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        #no {
+            background-color: #808080;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Kontener na dwa zdjęcia obok siebie */
         .photo-grid {
             display: flex;
             gap: 15px;
@@ -50,22 +77,22 @@
             flex-wrap: wrap;
             margin-top: 20px;
         }
-        
-        .responsive-img { 
+
+        .responsive-img {
             width: 40%; /* Nieco mniejsze zdjęcia */
             min-width: 250px;
-            max-width: 350px; 
-            border-radius: 15px; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
-            /* Zmiana na contain, żeby nie ucinało zdjęć */
+            max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            /* KLUCZOWA ZMIANA: contain zamiast cover, żeby nie ucinało */
             object-fit: contain; 
-            background-color: rgba(255,255,255,0.3); /* Lekkie tło, gdyby zdjęcie miało inny format */
+            background-color: rgba(255, 255, 255, 0.2); /* Delikatne tło dla zdjęć o różnych proporcjach */
         }
-        
-        #reset-btn { 
-            background-color: #c9184a; 
-            color: white; 
-            margin-top: 30px; 
+
+        #reset-btn {
+            background-color: #c9184a;
+            color: white;
+            margin-top: 30px;
             font-size: 1.5rem;
             padding: 15px 30px;
         }
@@ -82,14 +109,14 @@
 <body>
 
     <audio id="loveSong" loop>
-        <source src="muzyka.mp3" type="audio/mpeg">
+        <source src="record.mp3" type="audio/mpeg">
     </audio>
 
     <div id="main-content" class="container">
         <div class="heart">❤️</div>
         <h1>Julciu, moja miłości!</h1>
         <p>Sprawiłaś, że ten rok był wyjątkowy. Czy zostaniesz moją Walentynką?</p>
-        
+
         <button class="btn" id="yes" onclick="showSuccess()">TAK!</button>
         <button class="btn" id="no" onmouseover="handleMouseOver()" onclick="showCrazy()">NIE</button>
     </div>
@@ -138,7 +165,7 @@
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
             const audio = document.getElementById('loveSong');
-            audio.play().catch(e => console.log("Audio wymaga interakcji"));
+            audio.play().catch(e => console.log("Interakcja wymagana do audio"));
         }
 
         function showCrazy() {
