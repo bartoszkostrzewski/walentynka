@@ -69,7 +69,6 @@
             display: none;
         }
 
-        /* Kontener na dwa zdjęcia obok siebie */
         .photo-grid {
             display: flex;
             gap: 15px;
@@ -79,14 +78,13 @@
         }
 
         .responsive-img {
-            width: 40%; /* Nieco mniejsze zdjęcia */
-            min-width: 250px;
-            max-width: 350px;
+            width: 45%;
+            min-width: 280px;
+            height: 300px; /* Stała wysokość sprawia, że zdjęcia są równe */
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            /* KLUCZOWA ZMIANA: contain zamiast cover, żeby nie ucinało */
-            object-fit: contain; 
-            background-color: rgba(255, 255, 255, 0.2); /* Delikatne tło dla zdjęć o różnych proporcjach */
+            /* PRZYCINANIE: zdjęcia wypełniają ramkę */
+            object-fit: cover; 
         }
 
         #reset-btn {
@@ -102,7 +100,7 @@
             p { font-size: 1.3rem; }
             .btn { font-size: 1.6rem; padding: 15px 30px; }
             .heart { font-size: 60px; }
-            .responsive-img { width: 85%; }
+            .responsive-img { width: 90%; height: 250px; }
         }
     </style>
 </head>
@@ -165,7 +163,7 @@
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
             const audio = document.getElementById('loveSong');
-            audio.play().catch(e => console.log("Interakcja wymagana do audio"));
+            audio.play().catch(e => console.log("Czekam na interakcję dla dźwięku"));
         }
 
         function showCrazy() {
